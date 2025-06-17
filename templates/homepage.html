@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sonoridade Underground - Sistema Completo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #222;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+      font-family: 'Courier New', monospace;
+      display: none;
+      position: relative;
+    }
+    nav {
+      display: flex;
+      background-color: #333;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+    nav button {
+      background: none;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    nav button:hover {
+      background-color: #555;
+    }
+    .aba {
+      display: none;
+      padding: 20px;
+      min-height: 300px;
+      background-color: #1a1a1a;
+    }
+    .ativa {
+      display: block;
+    }
+    #logoutBtn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background-color: #444;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    #logoutBtn:hover {
+      background-color: #666;
+    }
+    .form-container {
+      max-width: 300px;
+      margin: 50px auto;
+      background-color: #222;
+      padding: 20px;
+      border-radius: 8px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      border: none;
+    }
+    button.submit-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #555;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    button.submit-btn:hover {
+      background-color: #777;
+    }
+    #msg {
+      text-align: center;
+      margin-bottom: 15px;
+      color: #f33;
+    }
+    #linkLogin, #linkCadastro {
+      text-align: center;
+      margin-top: 10px;
+      cursor: pointer;
+      color: #0af;
+    }
+    #linkLogin:hover, #linkCadastro:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<header id="header">
+  𝕾𝖔𝖓𝖔𝖗𝖎𝖉𝖆𝖉𝖊 𝖀𝖓𝖉𝖊𝖗𝖌𝖗𝖆𝖚𝖉 - Olá, <span id="usuarioNome"></span>!
+  <button id="logoutBtn" onclick="logout()">Sair</button>
+</header>
+
+<!-- Formulário Login -->
+<div id="loginDiv" class="form-container">
+  <h2>Login</h2>
+  <div id="msgLogin"></div>
+  <label for="loginNome">Nome:</label>
+  <input type="text" id="loginNome" placeholder="Seu nome" />
+  <label for="loginSenha">Senha:</label>
+  <input type="password" id="loginSenha" placeholder="Sua senha" />
+  <button class="submit-btn" onclick="fazerLogin()">Entrar</button>
+  <p id="linkCadastro" onclick="mostrarCadastro()">Não tem conta? Cadastre-se</p>
+</div>
+
+<!-- Formulário Cadastro -->
+<div id="cadastroDiv" class="form-container" style="display:none;">
+  <h2>Cadastro</h2>
+  <div id="msgCadastro"></div>
+  <label for="cadastroNome">Nome:</label>
+  <input type="text" id="cadastroNome" placeholder="Escolha um nome" />
+  <label for="cadastroSenha">Senha:</label>
+  <input type="password" id="cadastroSenha" placeholder="Escolha uma senha" />
+  <button class="submit-btn" onclick="fazerCadastro()">Cadastrar</button>
+  <p id="linkLogin" onclick="mostrarLogin()">Já tem conta? Faça login</p>
+</div>
+
+<!-- Página Principal com abas -->
+<div id="mainDiv" style="display:none;">
+  <nav>
+    <button onclick="abrirAba('artistas')">Artistas</button>
+    <button onclick="abrirAba('musicas')">Músicas</button>
+    <button onclick="abrirAba('perfil')">Perfil</button>
+    <button onclick="abrirAba('playlist')">Playlist</button>
+    <button onclick="abrirAba('sobre')">Sobre</button>
+  </nav>
+
+  <div id="artistas" class="aba ativa">
+    <h2>Artistas</h2>
+    <p>Descubra novos artistas independentes e underground da cena trap.</p>
+  </div>
+
+  <div id="musicas" class="aba">
+    <h2>Músicas</h2>
+    <p>Ouça as faixas mais recentes do underground e adicione às suas playlists.</p>
+  </div>
+
+  <div id="perfil" class="aba">
+    <h2>Perfil</h2>
+    <p>Gerencie suas informações, preferências e histórico de audições.</p>
+  </div>
+
+  <div id="playlist" class="aba">
+    <h2>Playlist</h2>
+    <p>Crie, edite e organize suas playlists personalizadas.</p>
+  </div>
+
+  <div id="sobre" class="aba">
+    <h2>Sobre o Projeto</h2>
+    <p>
+      <strong>𝕾𝖔𝖓𝖔𝖗𝖎𝖉𝖆𝖉𝖊 𝖀𝖓𝖉𝖊𝖗𝖌𝖗𝖆𝖚𝖉</strong> é um portal dedicado a promover e valorizar a cultura do <strong>trap underground</strong>,
+      um movimento artístico autêntico, cru e profundo, que muitas vezes é ignorado pelas grandes mídias.
+    </p>
+    <p>
+      Nosso objetivo é dar visibilidade a artistas independentes, criar conexões entre ouvintes e criadores,
+      e fortalecer uma comunidade que respira resistência, criatividade e identidade própria.
+    </p>
+    <p>
+      Aqui você encontra sons reais, vivências transformadas em batidas, e espaço para explorar a verdadeira essência do underground.
+    </p>
+  </div>
+</div>
+
+<script>
+  // Mostrar formulário cadastro/login
+  function mostrarCadastro() {
+    document.getElementById('loginDiv').style.display = 'none';
+    document.getElementById('cadastroDiv').style.display = 'block';
+    limparMensagens();
+  }
+  function mostrarLogin() {
+    document.getElementById('cadastroDiv').style.display = 'none';
+    document.getElementById('loginDiv').style.display = 'block';
+    limparMensagens();
+  }
+
+  // Abrir abas
+  function abrirAba(nome) {
+    let abas = document.getElementsByClassName('aba');
+    for(let aba of abas){
+      aba.classList.remove('ativa');
+    }
+    document.getElementById(nome).classList.add('ativa');
+  }
+
+  // Mostrar mensagem
+  function mostrarMsg(id, msg, cor='red'){
+    const el = document.getElementById(id);
+    el.style.color = cor;
+    el.innerText = msg;
+  }
+  function limparMensagens(){
+    mostrarMsg('msgLogin', '');
+    mostrarMsg('msgCadastro', '');
+  }
+
+  // Salvar usuários no localStorage
+  function salvarUsuarios(usuarios){
+    localStorage.setItem('usuarios', JSON.stringify(usuarios));
+  }
+  function carregarUsuarios(){
+    let usuarios = localStorage.getItem('usuarios');
+    return usuarios ? JSON.parse(usuarios) : {};
+  }
+
+  // Cadastro
+  function fazerCadastro(){
+    let nome = document.getElementById('cadastroNome').value.trim();
+    let senha = document.getElementById('cadastroSenha').value;
+    if(nome === '' || senha === ''){
+      mostrarMsg('msgCadastro', 'Preencha todos os campos');
+      return;
+    }
+    let usuarios = carregarUsuarios();
+    if(usuarios[nome]){
+      mostrarMsg('msgCadastro', 'Usuário já existe!');
+      return;
+    }
+    usuarios[nome] = senha;
+    salvarUsuarios(usuarios);
+    mostrarMsg('msgCadastro', 'Cadastro realizado com sucesso!', 'green');
+    setTimeout(() => {
+      mostrarLogin();
+      document.getElementById('cadastroNome').value = '';
+      document.getElementById('cadastroSenha').value = '';
+    }, 1500);
+  }
+
+  // Login
+  function fazerLogin(){
+    let nome = document.getElementById('loginNome').value.trim();
+    let senha = document.getElementById('loginSenha').value;
+    if(nome === '' || senha === ''){
+      mostrarMsg('msgLogin', 'Preencha todos os campos');
+      return;
+    }
+    let usuarios = carregarUsuarios();
+    if(usuarios[nome] && usuarios[nome] === senha){
+      localStorage.setItem('logado', nome);
+      iniciarSessao(nome);
+    } else {
+      mostrarMsg('msgLogin', 'Usuário ou senha incorretos!');
+    }
+  }
+
+  // Logout
+  function logout(){
+    localStorage.removeItem('logado');
+    document.getElementById('mainDiv').style.display = 'none';
+    document.getElementById('header').style.display = 'none';
+    mostrarLogin();
+    document.getElementById('loginNome').value = '';
+    document.getElementById('loginSenha').value = '';
+  }
+
+  // Iniciar sessão (mostrar conteúdo)
+  function iniciarSessao(nome){
+    document.getElementById('usuarioNome').innerText = nome;
+    document.getElementById('header').style.display = 'block';
+    document.getElementById('mainDiv').style.display = 'block';
+    document.getElementById('loginDiv').style.display = 'none';
+    document.getElementById('cadastroDiv').style.display = 'none';
+  }
+
+  // Ao carregar a página, verifica se já está logado
+  window.onload = function(){
+    let logado = localStorage.getItem('logado');
+    if(logado){
+      iniciarSessao(logado);
+    } else {
+      mostrarLogin();
+    }
+  }
+</script>
+
+</body>
+</html>
