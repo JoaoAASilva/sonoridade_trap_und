@@ -2,303 +2,326 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>Sonoridade Underground - Sistema Completo</title>
+  <title>𝕾𝖔𝖓𝖔𝖗𝖎𝖉𝖆𝖉𝖊 𝖀𝖓𝖉𝖊𝖗𝖌𝖗𝖆𝖚𝖉</title>
   <style>
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       background-color: #111;
       color: white;
-      margin: 0;
-      padding: 0;
     }
     header {
       background-color: #222;
-      padding: 15px;
+      padding: 20px;
       text-align: center;
-      font-size: 24px;
-      font-family: 'Courier New', monospace;
-      display: none;
-      position: relative;
+      font-size: 28px;
+      font-weight: bold;
     }
     nav {
       display: flex;
-      background-color: #333;
       justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
+      gap: 10px;
+      background-color: #333;
+      padding: 10px;
     }
     nav button {
-      background: none;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      cursor: pointer;
-    }
-    nav button:hover {
       background-color: #555;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
     }
     .aba {
       display: none;
       padding: 20px;
-      min-height: 300px;
-      background-color: #1a1a1a;
     }
-    .ativa {
-      display: block;
-    }
-    #logoutBtn {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background-color: #444;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-    }
-    #logoutBtn:hover {
-      background-color: #666;
-    }
-    .form-container {
-      max-width: 300px;
-      margin: 50px auto;
-      background-color: #222;
-      padding: 20px;
-      border-radius: 8px;
-    }
-    label {
-      display: block;
-      margin-bottom: 8px;
-    }
-    input {
-      width: 100%;
+    input, textarea, select {
+      margin: 5px 0;
       padding: 8px;
-      margin-bottom: 15px;
-      border-radius: 4px;
-      border: none;
-    }
-    button.submit-btn {
       width: 100%;
-      padding: 10px;
-      background-color: #555;
+      background-color: #222;
       color: white;
-      border: none;
-      cursor: pointer;
-      border-radius: 4px;
+      border: 1px solid #444;
     }
-    button.submit-btn:hover {
-      background-color: #777;
-    }
-    #msg {
-      text-align: center;
-      margin-bottom: 15px;
-      color: #f33;
-    }
-    #linkLogin, #linkCadastro {
-      text-align: center;
+    button {
       margin-top: 10px;
       cursor: pointer;
-      color: #0af;
     }
-    #linkLogin:hover, #linkCadastro:hover {
-      text-decoration: underline;
+    #perfil button.logout {
+      background-color: #a33;
+      margin-top: 20px;
+      width: 100%;
     }
-
-    /* Estilo com imagem de fundo para aba SOBRE */
-    #sobre {
-      background-image: url('file-37wNFQ9de9DTAqd5J2g8kA');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      backdrop-filter: brightness(0.7);
+    #perfil button.logout:hover {
+      background-color: #d44;
     }
-    #sobre h2, #sobre p {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 10px;
-      border-radius: 8px;
+    #perfil label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    #fotoPerfil {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid white;
+      margin-bottom: 10px;
+      display: block;
     }
   </style>
 </head>
 <body>
+  <header>𝕾𝖔𝖓𝖔𝖗𝖎𝖉𝖆𝖉𝖊 𝖀𝖓𝖉𝖊𝖗𝖌𝖗𝖆𝖚𝖉</header>
 
-<header id="header">
-  𝕾𝖔𝖓𝖔𝖗𝖎𝖉𝖆𝖉𝖊 𝖀𝖓𝖉𝖊𝖗𝖌𝖗𝖆𝖚𝖉 - Olá, <span id="usuarioNome"></span>!
-  <button id="logoutBtn" onclick="logout()">Sair</button>
-</header>
-
-<!-- Formulário Login -->
-<div id="loginDiv" class="form-container">
-  <h2>Login</h2>
-  <div id="msgLogin"></div>
-  <label for="loginNome">Nome:</label>
-  <input type="text" id="loginNome" placeholder="Seu nome" />
-  <label for="loginSenha">Senha:</label>
-  <input type="password" id="loginSenha" placeholder="Sua senha" />
-  <button class="submit-btn" onclick="fazerLogin()">Entrar</button>
-  <p id="linkCadastro" onclick="mostrarCadastro()">Não tem conta? Cadastre-se</p>
-</div>
-
-<!-- Formulário Cadastro -->
-<div id="cadastroDiv" class="form-container" style="display:none;">
-  <h2>Cadastro</h2>
-  <div id="msgCadastro"></div>
-  <label for="cadastroNome">Nome:</label>
-  <input type="text" id="cadastroNome" placeholder="Escolha um nome" />
-  <label for="cadastroSenha">Senha:</label>
-  <input type="password" id="cadastroSenha" placeholder="Escolha uma senha" />
-  <button class="submit-btn" onclick="fazerCadastro()">Cadastrar</button>
-  <p id="linkLogin" onclick="mostrarLogin()">Já tem conta? Faça login</p>
-</div>
-
-<!-- Página Principal com abas -->
-<div id="mainDiv" style="display:none;">
-  <nav>
-    <button onclick="abrirAba('artistas')">Artistas</button>
-    <button onclick="abrirAba('musicas')">Músicas</button>
-    <button onclick="abrirAba('perfil')">Perfil</button>
-    <button onclick="abrirAba('playlist')">Playlist</button>
-    <button onclick="abrirAba('sobre')">Sobre</button>
-  </nav>
-
-  <div id="artistas" class="aba ativa">
-    <h2>Artistas</h2>
-    <p>Descubra novos artistas independentes e underground da cena trap.</p>
+  <div id="autenticacao" style="display: flex; justify-content: center; gap: 80px; padding: 40px;">
+    <div>
+      <h2>Login</h2>
+      <input type="text" id="loginNome" placeholder="Nome" autocomplete="username" />
+      <input type="password" id="loginSenha" placeholder="Senha" autocomplete="current-password" />
+      <button onclick="fazerLogin()">Entrar</button>
+    </div>
+    <div>
+      <h2>Cadastro</h2>
+      <input type="text" id="cadNome" placeholder="Nome" autocomplete="username" />
+      <input type="password" id="cadSenha" placeholder="Senha" autocomplete="new-password" />
+      <button onclick="fazerCadastro()">Cadastrar</button>
+    </div>
   </div>
 
-  <div id="musicas" class="aba">
-    <h2>Músicas</h2>
-    <p>Ouça as faixas mais recentes do underground e adicione às suas playlists.</p>
+  <div id="site" style="display:none;">
+    <nav>
+      <button onclick="trocarAba('artista')">Artista</button>
+      <button onclick="trocarAba('musicas')">Músicas</button>
+      <button onclick="trocarAba('albuns')">Álbuns</button>
+      <button onclick="trocarAba('perfil')">Perfil</button>
+      <button onclick="trocarAba('mensagem')">Mensagem</button>
+      <button onclick="trocarAba('sobre')">Sobre</button>
+      <button onclick="trocarAba('contato')">Contato</button>
+    </nav>
+
+    <div id="artista" class="aba">
+      <h2>Artistas Underground</h2>
+      <p>Em breve: perfis dos artistas com fotos, músicas e estilo.</p>
+    </div>
+
+    <div id="musicas" class="aba">
+      <h2>Adicionar / Baixar Músicas</h2>
+      <input type="file" accept="audio/*" />
+      <button>Upload Música</button>
+      <p>Aqui também poderá baixar músicas disponíveis.</p>
+    </div>
+
+    <div id="albuns" class="aba">
+      <h2>Álbuns / Playlists</h2>
+      <input type="text" placeholder="Nome do Álbum" />
+      <button>Criar Álbum</button>
+      <p>Adicione músicas aos álbuns criados.</p>
+    </div>
+
+    <div id="perfil" class="aba">
+      <h2>Meu Perfil</h2>
+
+      <!-- Foto do usuário -->
+      <img id="fotoPerfil" src="" alt="Foto do Usuário" />
+
+      <label for="trocarFoto">Trocar Foto do Perfil:</label>
+      <input type="file" id="trocarFoto" accept="image/*" onchange="trocarFotoPerfil(event)" />
+
+      <p><strong>Usuário logado:</strong> <span id="nomeUsuarioPerfil"></span></p>
+
+      <label for="novoNome">Trocar nome:</label>
+      <input type="text" id="novoNome" placeholder="Digite o novo nome" />
+      <button onclick="trocarNome()">Atualizar Nome</button>
+
+      <textarea placeholder="Digite algo sobre você..."></textarea>
+      <button>Postar Conteúdo</button>
+
+      <button class="logout" onclick="fazerLogout()">Sair</button>
+    </div>
+
+    <div id="mensagem" class="aba">
+      <h2>Mensagem</h2>
+      <p>"A música underground resiste onde o brilho não chega."</p>
+    </div>
+
+    <div id="sobre" class="aba">
+      <h2>Sobre o Site</h2>
+      <p>O site <strong>Sonoridade Underground</strong> é uma plataforma para apoiar, divulgar e fortalecer o trap underground nacional, oferecendo espaço para artistas e fãs explorarem conteúdo autêntico.</p>
+    </div>
+
+    <div id="contato" class="aba">
+      <h2>Contato</h2>
+      <p>Email: <a href="mailto:sonoridadeundergraud674@gmail.com">sonoridadeundergraud674@gmail.com</a></p>
+    </div>
   </div>
 
-  <div id="perfil" class="aba">
-    <h2>Perfil</h2>
-    <p>Gerencie suas informações, preferências e histórico de audições.</p>
-  </div>
-
-  <div id="playlist" class="aba">
-    <h2>Playlist</h2>
-    <p>Crie, edite e organize suas playlists personalizadas.</p>
-  </div>
-
-  <div id="sobre" class="aba">
-    <h2>Sobre o Projeto</h2>
-    url_for("static")
-    <p>
-      <strong>𝕾𝖔𝖓𝖔𝖗𝖎𝖉𝖆𝖉𝖊 𝖀𝖓𝖉𝖊𝖗𝖌𝖗𝖆𝖚𝖉</strong> é um portal dedicado a promover e valorizar a cultura do <strong>trap underground</strong>,
-      um movimento artístico autêntico, cru e profundo, que muitas vezes é ignorado pelas grandes mídias.
-    </p>
-    <p>
-      Nosso objetivo é dar visibilidade a artistas independentes, criar conexões entre ouvintes e criadores,
-      e fortalecer uma comunidade que respira resistência, criatividade e identidade própria.
-    </p>
-    <p>
-      Aqui você encontra sons reais, vivências transformadas em batidas, e espaço para explorar a verdadeira essência do underground.
-    </p>
-  </div>
-</div>
-
-<script>
-  function mostrarCadastro() {
-    document.getElementById('loginDiv').style.display = 'none';
-    document.getElementById('cadastroDiv').style.display = 'block';
-    limparMensagens();
-  }
-  function mostrarLogin() {
-    document.getElementById('cadastroDiv').style.display = 'none';
-    document.getElementById('loginDiv').style.display = 'block';
-    limparMensagens();
-  }
-
-  function abrirAba(nome) {
-    let abas = document.getElementsByClassName('aba');
-    for(let aba of abas){
-      aba.classList.remove('ativa');
+  <script>
+    // Validação básica
+    function validarEntrada(nome, senha) {
+      if (!nome || !senha) {
+        alert('Por favor, preencha nome e senha.');
+        return false;
+      }
+      if (nome.length < 3) {
+        alert('Nome deve ter pelo menos 3 caracteres.');
+        return false;
+      }
+      if (senha.length < 4) {
+        alert('Senha deve ter pelo menos 4 caracteres.');
+        return false;
+      }
+      return true;
     }
-    document.getElementById(nome).classList.add('ativa');
-  }
 
-  function mostrarMsg(id, msg, cor='red'){
-    const el = document.getElementById(id);
-    el.style.color = cor;
-    el.innerText = msg;
-  }
-  function limparMensagens(){
-    mostrarMsg('msgLogin', '');
-    mostrarMsg('msgCadastro', '');
-  }
+    // Cadastro
+    function fazerCadastro() {
+      const nome = document.getElementById('cadNome').value.trim();
+      const senha = document.getElementById('cadSenha').value.trim();
 
-  function salvarUsuarios(usuarios){
-    localStorage.setItem('usuarios', JSON.stringify(usuarios));
-  }
-  function carregarUsuarios(){
-    let usuarios = localStorage.getItem('usuarios');
-    return usuarios ? JSON.parse(usuarios) : {};
-  }
+      if (!validarEntrada(nome, senha)) return;
 
-  function fazerCadastro(){
-    let nome = document.getElementById('cadastroNome').value.trim();
-    let senha = document.getElementById('cadastroSenha').value;
-    if(nome === '' || senha === ''){
-      mostrarMsg('msgCadastro', 'Preencha todos os campos');
-      return;
-    }
-    let usuarios = carregarUsuarios();
-    if(usuarios[nome]){
-      mostrarMsg('msgCadastro', 'Usuário já existe!');
-      return;
-    }
-    usuarios[nome] = senha;
-    salvarUsuarios(usuarios);
-    mostrarMsg('msgCadastro', 'Cadastro realizado com sucesso!', 'green');
-    setTimeout(() => {
-      mostrarLogin();
-      document.getElementById('cadastroNome').value = '';
-      document.getElementById('cadastroSenha').value = '';
-    }, 1500);
-  }
+      if (localStorage.getItem('usuario_' + nome)) {
+        alert('Usuário já existe, escolha outro nome.');
+        return;
+      }
 
-  function fazerLogin(){
-    let nome = document.getElementById('loginNome').value.trim();
-    let senha = document.getElementById('loginSenha').value;
-    if(nome === '' || senha === ''){
-      mostrarMsg('msgLogin', 'Preencha todos os campos');
-      return;
-    }
-    let usuarios = carregarUsuarios();
-    if(usuarios[nome] && usuarios[nome] === senha){
+      localStorage.setItem('usuario_' + nome, senha);
       localStorage.setItem('logado', nome);
-      iniciarSessao(nome);
-    } else {
-      mostrarMsg('msgLogin', 'Usuário ou senha incorretos!');
+      alert('Cadastro realizado com sucesso! Você já está logado.');
+      iniciarSessao();
+
+      document.getElementById('cadNome').value = '';
+      document.getElementById('cadSenha').value = '';
     }
-  }
 
-  function logout(){
-    localStorage.removeItem('logado');
-    document.getElementById('mainDiv').style.display = 'none';
-    document.getElementById('header').style.display = 'none';
-    mostrarLogin();
-    document.getElementById('loginNome').value = '';
-    document.getElementById('loginSenha').value = '';
-  }
+    // Login
+    function fazerLogin() {
+      const nome = document.getElementById('loginNome').value.trim();
+      const senha = document.getElementById('loginSenha').value.trim();
 
-  function iniciarSessao(nome){
-    document.getElementById('usuarioNome').innerText = nome;
-    document.getElementById('header').style.display = 'block';
-    document.getElementById('mainDiv').style.display = 'block';
-    document.getElementById('loginDiv').style.display = 'none';
-    document.getElementById('cadastroDiv').style.display = 'none';
-  }
+      if (!validarEntrada(nome, senha)) return;
 
-  window.onload = function(){
-    let logado = localStorage.getItem('logado');
-    if(logado){
-      iniciarSessao(logado);
-    } else {
-      mostrarLogin();
+      const salvo = localStorage.getItem('usuario_' + nome);
+      if (salvo && salvo === senha) {
+        localStorage.setItem('logado', nome);
+        iniciarSessao();
+
+        document.getElementById('loginNome').value = '';
+        document.getElementById('loginSenha').value = '';
+      } else {
+        alert('Nome ou senha incorretos');
+      }
     }
-  }
-</script>
 
+    // Iniciar sessão
+    function iniciarSessao() {
+      document.getElementById('autenticacao').style.display = 'none';
+      document.getElementById('site').style.display = 'block';
+      trocarAba('artista');
+      atualizarPerfil();
+    }
+
+    // Atualiza nome e foto no perfil
+    function atualizarPerfil() {
+      const nome = localStorage.getItem('logado');
+      document.getElementById('nomeUsuarioPerfil').textContent = nome || '';
+      document.getElementById('novoNome').value = '';
+
+      // Pega a foto salva (base64)
+      const fotoBase64 = localStorage.getItem('foto_' + nome);
+      const imgPerfil = document.getElementById('fotoPerfil');
+
+      if (fotoBase64) {
+        imgPerfil.src = fotoBase64;
+      } else {
+        // Imagem padrão se não tiver foto
+        imgPerfil.src = 'https://via.placeholder.com/120?text=Sem+Foto';
+      }
+    }
+
+    // Trocar nome do usuário
+    function trocarNome() {
+      const nomeAtual = localStorage.getItem('logado');
+      const novoNome = document.getElementById('novoNome').value.trim();
+
+      if (!novoNome) {
+        alert('Digite um novo nome.');
+        return;
+      }
+      if (novoNome.length < 3) {
+        alert('O nome deve ter pelo menos 3 caracteres.');
+        return;
+      }
+      if (localStorage.getItem('usuario_' + novoNome)) {
+        alert('Esse nome já está em uso. Escolha outro.');
+        return;
+      }
+
+      // Pega senha e foto do usuário atual
+      const senha = localStorage.getItem('usuario_' + nomeAtual);
+      const foto = localStorage.getItem('foto_' + nomeAtual);
+
+      // Remove dados antigos
+      localStorage.removeItem('usuario_' + nomeAtual);
+      localStorage.removeItem('foto_' + nomeAtual);
+
+      // Cria novo usuário com os mesmos dados
+      localStorage.setItem('usuario_' + novoNome, senha);
+      if (foto) localStorage.setItem('foto_' + novoNome, foto);
+
+      // Atualiza login para novo nome
+      localStorage.setItem('logado', novoNome);
+
+      alert('Nome atualizado com sucesso!');
+      atualizarPerfil();
+    }
+
+    // Trocar foto de perfil
+    function trocarFotoPerfil(event) {
+      const arquivo = event.target.files[0];
+      if (!arquivo) return;
+
+      // Limite simples para tamanho da imagem (exemplo: 2MB)
+      if (arquivo.size > 2 * 1024 * 1024) {
+        alert('Imagem muito grande! Máximo 2MB.');
+        return;
+      }
+
+      const leitor = new FileReader();
+      leitor.onload = function(e) {
+        const base64 = e.target.result;
+        const nome = localStorage.getItem('logado');
+        if (!nome) {
+          alert('Nenhum usuário logado.');
+          return;
+        }
+        localStorage.setItem('foto_' + nome, base64);
+        atualizarPerfil();
+        alert('Foto do perfil atualizada!');
+      };
+      leitor.readAsDataURL(arquivo);
+    }
+
+    // Logout
+    function fazerLogout() {
+      localStorage.removeItem('logado');
+      document.getElementById('site').style.display = 'none';
+      document.getElementById('autenticacao').style.display = 'flex';
+      document.querySelectorAll('.aba').forEach(aba => aba.style.display = 'none');
+    }
+
+    // Trocar aba
+    function trocarAba(nome) {
+      document.querySelectorAll('.aba').forEach(aba => aba.style.display = 'none');
+      document.getElementById(nome).style.display = 'block';
+    }
+
+    // Onload
+    window.onload = () => {
+      const logado = localStorage.getItem('logado');
+      if (logado) iniciarSessao();
+    };
+  </script>
 </body>
 </html>
