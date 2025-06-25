@@ -17,12 +17,27 @@
       font-size: 28px;
       font-weight: bold;
     }
+    #barraPesquisa {
+      display: none;
+      background-color: #222;
+      padding: 10px;
+      text-align: center;
+    }
+    #barraPesquisa input {
+      width: 60%;
+      padding: 8px;
+      background-color: #333;
+      border: 1px solid #555;
+      color: white;
+      font-size: 16px;
+    }
     nav {
       display: flex;
       justify-content: center;
       gap: 10px;
       background-color: #333;
       padding: 10px;
+      flex-wrap: wrap;
     }
     nav button {
       background-color: #555;
@@ -30,6 +45,9 @@
       border: none;
       padding: 10px 20px;
       cursor: pointer;
+    }
+    nav button.ativo {
+      background-color: #00aaff;
     }
     .aba {
       display: none;
@@ -47,32 +65,37 @@
       margin-top: 10px;
       cursor: pointer;
     }
-    #perfil button.logout {
-      background-color: #a33;
-      margin-top: 20px;
-      width: 100%;
-    }
-    #perfil button.logout:hover {
-      background-color: #d44;
-    }
-    #perfil label {
-      display: block;
+    img.preview {
+      max-width: 150px;
       margin-top: 10px;
-      font-weight: bold;
+      border: 1px solid #444;
     }
-    #fotoPerfil {
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid white;
+    audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+    #chatBox {
+      background-color: #222;
+      padding: 10px;
+      max-height: 300px;
+      overflow-y: auto;
       margin-bottom: 10px;
-      display: block;
+      border: 1px solid #444;
+    }
+    .musica-item {
+      margin-bottom: 20px;
+      border-bottom: 1px solid #444;
+      padding-bottom: 10px;
     }
   </style>
 </head>
 <body>
   <header>𝕾𝖔𝖓𝖔𝖗𝖎𝖉𝖆𝖉𝖊 𝖀𝖓𝖉𝖊𝖗𝖌𝖗𝖆𝖚𝖉</header>
+
+  <!-- Barra de Pesquisa -->
+  <div id="barraPesquisa">
+    <input type="text" id="inputPesquisa" placeholder="Pesquisar..." oninput="filtrarConteudo()" />
+  </div>
 
   <div id="autenticacao" style="display: flex; justify-content: center; gap: 80px; padding: 40px;">
     <div>
@@ -91,63 +114,65 @@
 
   <div id="site" style="display:none;">
     <nav>
-      <button onclick="trocarAba('artista')">Artista</button>
-      <button onclick="trocarAba('musicas')">Músicas</button>
-      <button onclick="trocarAba('albuns')">Álbuns</button>
-      <button onclick="trocarAba('perfil')">Perfil</button>
-      <button onclick="trocarAba('mensagem')">Mensagem</button>
-      <button onclick="trocarAba('sobre')">Sobre</button>
-      <button onclick="trocarAba('contato')">Contato</button>
+      <button onclick="trocarAba('artista')" id="btn-artista">Artista</button>
+      <button onclick="trocarAba('musicas')" id="btn-musicas">Músicas</button>
+      <button onclick="trocarAba('albuns')" id="btn-albuns">Álbuns</button>
+      <button onclick="trocarAba('perfil')" id="btn-perfil">Perfil</button>
+      <button onclick="trocarAba('mensagem')" id="btn-mensagem">Mensagem</button>
+      <button onclick="trocarAba('pesquisa')" id="btn-pesquisa">Pesquisa</button>
+      <button onclick="trocarAba('sobre')" id="btn-sobre">Sobre</button>
+      <button onclick="trocarAba('contato')" id="btn-contato">Contato</button>
     </nav>
 
     <div id="artista" class="aba">
-      <h2>Artistas Underground</h2>
-      <p>Em breve: perfis dos artistas com fotos, músicas e estilo.</p>
+      <h2>Perfil do Artista</h2>
+      <input type="file" accept="image/*" onchange="previewImagem(this, 'fotoArtista')" />
+      <img id="fotoArtista" class="preview" style="display:none;"/>
+      <textarea placeholder="Descrição do artista..."></textarea>
+      <button>Salvar Perfil Artista</button>
     </div>
 
     <div id="musicas" class="aba">
-      <h2>Adicionar / Baixar Músicas</h2>
-      <input type="file" accept="audio/*" />
-      <button>Upload Música</button>
-      <p>Aqui também poderá baixar músicas disponíveis.</p>
+      <h2>Postar Música</h2>
+      <input type="file" accept="audio/*" onchange="salvarMusica(this)" />
+      <div id="listaMusicas"></div>
     </div>
 
     <div id="albuns" class="aba">
       <h2>Álbuns / Playlists</h2>
       <input type="text" placeholder="Nome do Álbum" />
       <button>Criar Álbum</button>
-      <p>Adicione músicas aos álbuns criados.</p>
     </div>
 
     <div id="perfil" class="aba">
       <h2>Meu Perfil</h2>
-
-      <!-- Foto do usuário -->
-      <img id="fotoPerfil" src="" alt="Foto do Usuário" />
-
-      <label for="trocarFoto">Trocar Foto do Perfil:</label>
-      <input type="file" id="trocarFoto" accept="image/*" onchange="trocarFotoPerfil(event)" />
-
-      <p><strong>Usuário logado:</strong> <span id="nomeUsuarioPerfil"></span></p>
-
-      <label for="novoNome">Trocar nome:</label>
-      <input type="text" id="novoNome" placeholder="Digite o novo nome" />
-      <button onclick="trocarNome()">Atualizar Nome</button>
-
-      <textarea placeholder="Digite algo sobre você..."></textarea>
+      <input type="file" accept="image/*" onchange="uploadImagem(this, 'fotoPerfil')" />
+      <img id="fotoPerfil" class="preview" style="display:none;"/>
+      <input type="file" accept="image/*" onchange="uploadImagem(this, 'bannerPerfil')" />
+      <img id="bannerPerfil" class="preview" style="display:none;"/>
+      <input type="text" placeholder="Novo nome" id="novoNome" />
+      <textarea placeholder="O que está pensando?"></textarea>
       <button>Postar Conteúdo</button>
-
+      <button onclick="alterarNome()">Alterar Nome</button>
       <button class="logout" onclick="fazerLogout()">Sair</button>
     </div>
 
     <div id="mensagem" class="aba">
       <h2>Mensagem</h2>
-      <p>"A música underground resiste onde o brilho não chega."</p>
+      <div id="chatBox"></div>
+      <input type="text" id="mensagemInput" placeholder="Digite sua mensagem..." />
+      <button onclick="enviarMensagem()">Enviar</button>
+    </div>
+
+    <div id="pesquisa" class="aba">
+      <h2>Pesquisar Usuário</h2>
+      <input type="text" placeholder="Digite o nome..." id="campoPesquisa" oninput="pesquisarUsuario()" />
+      <ul id="resultadoPesquisa"></ul>
     </div>
 
     <div id="sobre" class="aba">
       <h2>Sobre o Site</h2>
-      <p>O site <strong>Sonoridade Underground</strong> é uma plataforma para apoiar, divulgar e fortalecer o trap underground nacional, oferecendo espaço para artistas e fãs explorarem conteúdo autêntico.</p>
+      <p>Sonoridade Underground apoia o trap nacional, oferecendo espaço a artistas e fãs.</p>
     </div>
 
     <div id="contato" class="aba">
@@ -157,167 +182,287 @@
   </div>
 
   <script>
-    // Validação básica
     function validarEntrada(nome, senha) {
       if (!nome || !senha) {
-        alert('Por favor, preencha nome e senha.');
-        return false;
+        alert('Preencha nome e senha.'); return false;
       }
-      if (nome.length < 3) {
-        alert('Nome deve ter pelo menos 3 caracteres.');
-        return false;
-      }
-      if (senha.length < 4) {
-        alert('Senha deve ter pelo menos 4 caracteres.');
-        return false;
+      if (nome.length < 3 || senha.length < 4) {
+        alert('Nome ou senha muito curtos.'); return false;
       }
       return true;
     }
 
-    // Cadastro
     function fazerCadastro() {
       const nome = document.getElementById('cadNome').value.trim();
       const senha = document.getElementById('cadSenha').value.trim();
-
       if (!validarEntrada(nome, senha)) return;
-
       if (localStorage.getItem('usuario_' + nome)) {
-        alert('Usuário já existe, escolha outro nome.');
-        return;
+        alert('Usuário já existe.'); return;
       }
-
       localStorage.setItem('usuario_' + nome, senha);
-      localStorage.setItem('logado', nome);
-      alert('Cadastro realizado com sucesso! Você já está logado.');
-      iniciarSessao();
-
+      alert('Cadastro realizado! Faça login.');
       document.getElementById('cadNome').value = '';
       document.getElementById('cadSenha').value = '';
     }
 
-    // Login
     function fazerLogin() {
       const nome = document.getElementById('loginNome').value.trim();
       const senha = document.getElementById('loginSenha').value.trim();
-
       if (!validarEntrada(nome, senha)) return;
-
       const salvo = localStorage.getItem('usuario_' + nome);
       if (salvo && salvo === senha) {
         localStorage.setItem('logado', nome);
         iniciarSessao();
-
-        document.getElementById('loginNome').value = '';
-        document.getElementById('loginSenha').value = '';
       } else {
         alert('Nome ou senha incorretos');
       }
     }
 
-    // Iniciar sessão
     function iniciarSessao() {
       document.getElementById('autenticacao').style.display = 'none';
       document.getElementById('site').style.display = 'block';
-      trocarAba('artista');
-      atualizarPerfil();
+      trocarAba('perfil');
+      mostrarNomeUsuario();
+      carregarUsuarios();
+      carregarMusicas();
+      carregarArtistas();
+      carregarImagensPerfil();
+      carregarChat();
+      mostrarBarraPesquisa(true);
     }
 
-    // Atualiza nome e foto no perfil
-    function atualizarPerfil() {
-      const nome = localStorage.getItem('logado');
-      document.getElementById('nomeUsuarioPerfil').textContent = nome || '';
-      document.getElementById('novoNome').value = '';
-
-      // Pega a foto salva (base64)
-      const fotoBase64 = localStorage.getItem('foto_' + nome);
-      const imgPerfil = document.getElementById('fotoPerfil');
-
-      if (fotoBase64) {
-        imgPerfil.src = fotoBase64;
-      } else {
-        // Imagem padrão se não tiver foto
-        imgPerfil.src = 'https://via.placeholder.com/120?text=Sem+Foto';
-      }
-    }
-
-    // Trocar nome do usuário
-    function trocarNome() {
-      const nomeAtual = localStorage.getItem('logado');
-      const novoNome = document.getElementById('novoNome').value.trim();
-
-      if (!novoNome) {
-        alert('Digite um novo nome.');
-        return;
-      }
-      if (novoNome.length < 3) {
-        alert('O nome deve ter pelo menos 3 caracteres.');
-        return;
-      }
-      if (localStorage.getItem('usuario_' + novoNome)) {
-        alert('Esse nome já está em uso. Escolha outro.');
-        return;
-      }
-
-      // Pega senha e foto do usuário atual
-      const senha = localStorage.getItem('usuario_' + nomeAtual);
-      const foto = localStorage.getItem('foto_' + nomeAtual);
-
-      // Remove dados antigos
-      localStorage.removeItem('usuario_' + nomeAtual);
-      localStorage.removeItem('foto_' + nomeAtual);
-
-      // Cria novo usuário com os mesmos dados
-      localStorage.setItem('usuario_' + novoNome, senha);
-      if (foto) localStorage.setItem('foto_' + novoNome, foto);
-
-      // Atualiza login para novo nome
-      localStorage.setItem('logado', novoNome);
-
-      alert('Nome atualizado com sucesso!');
-      atualizarPerfil();
-    }
-
-    // Trocar foto de perfil
-    function trocarFotoPerfil(event) {
-      const arquivo = event.target.files[0];
-      if (!arquivo) return;
-
-      // Limite simples para tamanho da imagem (exemplo: 2MB)
-      if (arquivo.size > 2 * 1024 * 1024) {
-        alert('Imagem muito grande! Máximo 2MB.');
-        return;
-      }
-
-      const leitor = new FileReader();
-      leitor.onload = function(e) {
-        const base64 = e.target.result;
-        const nome = localStorage.getItem('logado');
-        if (!nome) {
-          alert('Nenhum usuário logado.');
-          return;
-        }
-        localStorage.setItem('foto_' + nome, base64);
-        atualizarPerfil();
-        alert('Foto do perfil atualizada!');
-      };
-      leitor.readAsDataURL(arquivo);
-    }
-
-    // Logout
     function fazerLogout() {
       localStorage.removeItem('logado');
       document.getElementById('site').style.display = 'none';
       document.getElementById('autenticacao').style.display = 'flex';
-      document.querySelectorAll('.aba').forEach(aba => aba.style.display = 'none');
+      mostrarBarraPesquisa(false);
     }
 
-    // Trocar aba
     function trocarAba(nome) {
-      document.querySelectorAll('.aba').forEach(aba => aba.style.display = 'none');
+      document.querySelectorAll('.aba').forEach(a => a.style.display = 'none');
       document.getElementById(nome).style.display = 'block';
+
+      // Atualiza botão ativo
+      document.querySelectorAll('nav button').forEach(b => b.classList.remove('ativo'));
+      document.getElementById('btn-' + nome)?.classList.add('ativo');
+
+      if (nome === 'contato' || nome === 'sobre') {
+        mostrarBarraPesquisa(false);
+      } else {
+        mostrarBarraPesquisa(true);
+        filtrarConteudo();
+      }
     }
 
-    // Onload
+    function mostrarNomeUsuario() {
+      const nome = localStorage.getItem('logado');
+      const perfil = document.getElementById('perfil');
+      let user = document.getElementById('nomeUsuario');
+      if (!user) {
+        user = document.createElement('p');
+        user.id = 'nomeUsuario';
+        perfil.insertBefore(user, perfil.firstChild);
+      }
+      user.textContent = 'Usuário logado: ' + nome;
+    }
+
+    function previewImagem(input, idImg) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = document.getElementById(idImg);
+        img.src = reader.result;
+        img.style.display = 'block';
+      };
+      if (file) reader.readAsDataURL(file);
+    }
+
+    function uploadImagem(input, id) {
+      const file = input.files[0];
+      const reader = new FileReader();
+      const usuario = localStorage.getItem('logado');
+      reader.onload = () => {
+        localStorage.setItem(`imagem_${usuario}_${id}`, reader.result);
+        const img = document.getElementById(id);
+        img.src = reader.result;
+        img.style.display = 'block';
+      };
+      if (file) reader.readAsDataURL(file);
+    }
+
+    function carregarImagensPerfil() {
+      const usuario = localStorage.getItem('logado');
+      ['fotoPerfil', 'bannerPerfil', 'fotoArtista'].forEach(id => {
+        const src = localStorage.getItem(`imagem_${usuario}_${id}`);
+        if (src) {
+          const img = document.getElementById(id);
+          if(img) {
+            img.src = src;
+            img.style.display = 'block';
+          }
+        }
+      });
+    }
+
+    function salvarMusica(input) {
+      const nome = document.getElementById('nomeMusica')?.value || input.files[0].name;
+      const file = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        let musicas = JSON.parse(localStorage.getItem('musicas')) || [];
+        musicas.push({ nome: nome, src: reader.result });
+        localStorage.setItem('musicas', JSON.stringify(musicas));
+        carregarMusicas();
+        if(document.getElementById('nomeMusica')) document.getElementById('nomeMusica').value = '';
+      };
+      if (file) reader.readAsDataURL(file);
+    }
+
+    function carregarMusicas() {
+      const lista = document.getElementById('listaMusicas');
+      if(!lista) return;
+      lista.innerHTML = '';
+      const musicas = JSON.parse(localStorage.getItem('musicas')) || [];
+      musicas.forEach(m => {
+        const div = document.createElement('div');
+        div.classList.add('musica-item');
+        div.innerHTML = `<p><strong>${m.nome}</strong></p><audio controls src="${m.src}"></audio>`;
+        lista.appendChild(div);
+      });
+    }
+
+    function enviarMensagem() {
+      const nome = localStorage.getItem('logado');
+      const texto = document.getElementById('mensagemInput').value;
+      if (!texto) return;
+      let mensagens = JSON.parse(localStorage.getItem('chat')) || [];
+      mensagens.push({ nome, texto, data: new Date().toLocaleTimeString() });
+      localStorage.setItem('chat', JSON.stringify(mensagens));
+      document.getElementById('mensagemInput').value = '';
+      carregarChat();
+      filtrarConteudo(); // Atualiza filtro após nova mensagem
+    }
+
+    function carregarChat() {
+      const chat = document.getElementById('chatBox');
+      if(!chat) return;
+      chat.innerHTML = '';
+      const mensagens = JSON.parse(localStorage.getItem('chat')) || [];
+      mensagens.forEach(m => {
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${m.nome}</strong>: ${m.texto} <small>${m.data}</small>`;
+        chat.appendChild(p);
+      });
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    function salvarArtista() {
+      const nome = document.querySelector('#artista textarea').value.trim();
+      const desc = document.querySelector('#artista textarea').value.trim();
+      const img = document.getElementById('fotoArtista').src || '';
+      let artistas = JSON.parse(localStorage.getItem('artistas')) || [];
+      artistas.push({ nome, desc, img });
+      localStorage.setItem('artistas', JSON.stringify(artistas));
+      carregarArtistas();
+    }
+
+    function carregarArtistas() {
+      const container = document.getElementById('artistasSalvos');
+      if(!container) return;
+      container.innerHTML = '';
+      const artistas = JSON.parse(localStorage.getItem('artistas')) || [];
+      artistas.forEach(a => {
+        const div = document.createElement('div');
+        div.innerHTML = `<h3>${a.nome}</h3><img src="${a.img}" class="preview"/><p>${a.desc}</p><hr>`;
+        container.appendChild(div);
+      });
+    }
+
+    function carregarUsuarios() {
+      const lista = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const chave = localStorage.key(i);
+        if (chave.startsWith('usuario_')) {
+          lista.push(chave.replace('usuario_', ''));
+        }
+      }
+      localStorage.setItem('listaUsuarios', JSON.stringify(lista));
+    }
+
+    function pesquisarUsuario() {
+      const termo = document.getElementById('campoPesquisa')?.value.toLowerCase() || '';
+      const lista = JSON.parse(localStorage.getItem('listaUsuarios')) || [];
+      const ul = document.getElementById('resultadoPesquisa');
+      if(!ul) return;
+      ul.innerHTML = '';
+      lista.filter(n => n.toLowerCase().includes(termo)).forEach(n => {
+        const li = document.createElement('li');
+        li.textContent = n;
+        ul.appendChild(li);
+      });
+    }
+
+    function mostrarBarraPesquisa(mostrar) {
+      const barra = document.getElementById('barraPesquisa');
+      if (mostrar) {
+        barra.style.display = 'block';
+        document.getElementById('inputPesquisa').value = '';
+      } else {
+        barra.style.display = 'none';
+      }
+    }
+
+    // Função para filtrar conteúdo das abas com base no input da barra de pesquisa
+    function filtrarConteudo() {
+      const termo = document.getElementById('inputPesquisa').value.toLowerCase();
+      const abaAtiva = document.querySelector('.aba[style*="block"]');
+      if (!abaAtiva) return;
+
+      // Definir o que filtrar conforme aba
+      if (abaAtiva.id === 'artista') {
+        // filtrar artistas
+        const artistasDivs = document.querySelectorAll('#artista div');
+        artistasDivs.forEach(div => {
+          if (div.textContent.toLowerCase().includes(termo)) {
+            div.style.display = '';
+          } else {
+            div.style.display = 'none';
+          }
+        });
+      } else if (abaAtiva.id === 'musicas') {
+        // filtrar músicas
+        const musicasDivs = document.querySelectorAll('.musica-item');
+        musicasDivs.forEach(div => {
+          if (div.textContent.toLowerCase().includes(termo)) {
+            div.style.display = '';
+          } else {
+            div.style.display = 'none';
+          }
+        });
+      } else if (abaAtiva.id === 'mensagem') {
+        // filtrar mensagens
+        const mensagensP = document.querySelectorAll('#chatBox p');
+        mensagensP.forEach(p => {
+          if (p.textContent.toLowerCase().includes(termo)) {
+            p.style.display = '';
+          } else {
+            p.style.display = 'none';
+          }
+        });
+      } else if (abaAtiva.id === 'perfil') {
+        // filtrar conteúdo do perfil (ex: texto do textarea)
+        const perfil = document.getElementById('perfil');
+        const texto = perfil.querySelector('textarea').value.toLowerCase();
+        if (texto.includes(termo)) {
+          perfil.style.display = 'block';
+        } else {
+          perfil.style.display = 'block'; // Sempre mostra perfil, pq é só 1 conteúdo, sem lista
+        }
+      } else {
+        // Para outras abas que não tem filtro, não faz nada
+      }
+    }
+
     window.onload = () => {
       const logado = localStorage.getItem('logado');
       if (logado) iniciarSessao();
